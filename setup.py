@@ -1,8 +1,13 @@
 import os
 from setuptools import find_packages, setup
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
+BASE_DIR = os.path.dirname(__file__)
+
+with open(os.path.join(BASE_DIR, 'README.md')) as readme:
     README = readme.read()
+
+with open(os.path.join(BASE_DIR, 'requirements.txt')) as requirements:
+    REQUIREMENTS = list(line.strip() for line in requirements.readlines())
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -12,6 +17,7 @@ setup(
     version='0.1',
     packages=find_packages(),
     include_package_data=True,
+    install_requires=REQUIREMENTS,
     license='MIT License',
     description='Override current user based on subdomain',
     long_description=README,
