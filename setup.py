@@ -23,6 +23,7 @@ setup(
     long_description=README,
     author='Mikhail Pyrev',
     author_email='mikhail.pyrev@gmail.com',
+    url='https://github.com/mpyrev/django-host-user-override',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
