@@ -1,0 +1,11 @@
+.host-user-override {
+    width: 100%;
+    background-color: #FFBABA;
+    color: #D8000C;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+.host-user-override .content {
+    margin: 0 auto;
+}

@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+{% load i18n host_user_override %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    {% if request.user != original and not original.is_superuser %}
+        <li><a id="host-user-override-link" target="_blank" href="{% get_login_link original %}">{% trans 'Login as multiuser' %}</a></li>
+    {% endif %}
+{% endblock %}

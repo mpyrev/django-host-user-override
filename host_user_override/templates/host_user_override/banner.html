@@ -1,0 +1,18 @@
+{% load static i18n host_user_override %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'host_user_override/style.css' %}">
+{% endblock %}
+
+{% block banner %}
+    <div id="host-user-override" class="host-user-override">
+        <div class="content">
+            {% block banner_content %}
+                {% blocktrans %}You're logged in as {{ user }}.{% endblocktrans %}
+                {% get_original_host as original_host %}
+                {% url 'admin:index' as admin_index %}
+                {% blocktrans %}Get back to admin as <a href="//{{ original_host }}{{ admin_index }}">{{ original }}</a>.{% endblocktrans %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
