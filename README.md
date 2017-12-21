@@ -2,12 +2,24 @@
 
 Overrides current user based on host prefix. For example any request to
 ```5.user.example.com``` becomes request as if you were logged in as
-user with ID 5. Works only if you're actually logged in as superuser.
+user with ID 5. This allows you to be logged in as different users in
+different tabs **at the same time** without losing your primary
+authenticated user.
+
+Works only if you're logged in as superuser.
 
 Also gives you big red banner on top of every page if your user is
 overridden.
 
-### Installing django-host-user-override
+## Requirements
+
+* Your DNS server should resolve subdomains ```*.user.<your domain>```
+  to the same IP address as main domain.
+* Your project should not use absolute link generation or any other
+  technic that can change current subdomain. It is a more inconvenience
+  than requirement though.
+
+## Installing django-host-user-override
 
 1. Install the package from PyPI: ```pip install django-host-user-override```
 
