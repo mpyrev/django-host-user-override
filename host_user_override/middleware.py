@@ -5,11 +5,19 @@ import re
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_text
 
+from host_user_override import conf
+from host_user_override.utils import get_original_host
+
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
+
+REDIRECT_RESPONSE_CLASS = HttpResponseRedirect
+if conf.PERMANENT_REDIRECT:
+    REDIRECT_RESPONSE_CLASS = HttpResponsePermanentRedirect
 
 
 class HostUserOverrideMiddleware(object):
@@ -19,7 +27,7 @@ class HostUserOverrideMiddleware(object):
     """
     def __init__(self, get_response):
         self.get_response = get_response
-        self.regexp = re.compile(r'(\d+)\.user\..+')
+        self.regexp = re.compile(conf.HOST_REGEXP)
 
     def get_user_id(self, host):
         match = self.regexp.match(host)
@@ -32,9 +40,11 @@ class HostUserOverrideMiddleware(object):
     def __call__(self, request):
         overridden = False
         original_user = request.user
+
+        host = request.META.get('HTTP_HOST', '')
+        user_id = self.get_user_id(host)
+
         if request.user.is_superuser:
-            host = request.get_host()
-            user_id = self.get_user_id(host)
             if user_id is not None and user_id != request.user.pk:
                 User = get_user_model()
                 try:
@@ -44,6 +54,14 @@ class HostUserOverrideMiddleware(object):
                 else:
                     overridden = True
                 request.user = user
+        else:
+            # Redirect non-superusers to original domain
+            # Probably should be 302 redirect, but we need permanent for SEO
+            if user_id is not None:
+                original_host = get_original_host(host)
+                return REDIRECT_RESPONSE_CLASS(u'{scheme}://{host}{path}'.format(
+                    scheme=request.scheme, host=original_host, path=request.path
+                ))
 
         response = self.get_response(request)
 

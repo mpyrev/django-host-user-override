@@ -1,10 +1,10 @@
 # django-host-user-override
 
 Overrides current user based on host prefix. For example any request to
-```5.user.example.com``` becomes request as if you were logged in as
-user with ID 5. This allows you to be logged in as different users in
-different tabs **at the same time** without losing your primary
-authenticated user.
+```5.user.example.com``` (format can be changed in settings) becomes
+request as if you were logged in as user with ID 5. This allows you
+to be logged in as different users in different tabs
+**at the same time** without losing your primary authenticated user.
 
 Works only if you're logged in as superuser.
 
@@ -56,6 +56,19 @@ admin.site.unregister(User)
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     change_form_template = 'host_user_override/change_form.html'
+```
+
+### Optional settings
+
+6. Update ```settings.py``` if you want host pattern other than ```<id>.user.<domain>```. Example for ```u<id>.<domain>```:
+```python
+HOSTUSEROVERRIDE_HOST_REGEXP = r'u(\d+)\..+'
+
+HOSTUSEROVERRIDE_HOST_SUB_REGEXP = r'u\d+\.'
+
+HOSTUSEROVERRIDE_REDIRECT_URL_FORMAT = 'http://u{user_id}.{host}/'
+
+HOSTUSEROVERRIDE_PERMANENT_REDIRECT = False
 ```
 
 ## Usage

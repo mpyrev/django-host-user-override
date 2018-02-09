@@ -123,3 +123,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Host user override specific
+
+HOSTUSEROVERRIDE_HOST_REGEXP = r'u(\d+)\..+'
+
+HOSTUSEROVERRIDE_HOST_SUB_REGEXP = r'u\d+\.'
+
+HOSTUSEROVERRIDE_REDIRECT_URL_FORMAT = 'http://u{user_id}.{host}/'
+
+HOSTUSEROVERRIDE_PERMANENT_REDIRECT = False
