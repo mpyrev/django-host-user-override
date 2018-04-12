@@ -3,7 +3,7 @@
 
 {% block object-tools-items %}
     {{ block.super }}
-    {% if request.user != original and not original.is_superuser %}
+    {% if request.user != original and not original.is_superuser and request.user|has_permission_to_be:original %}
         <li><a id="host-user-override-link" target="_blank" href="{% get_login_link original %}">{% trans 'Login as multiuser' %}</a></li>
     {% endif %}
 {% endblock %}

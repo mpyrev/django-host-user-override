@@ -21,3 +21,8 @@ def get_login_link(context, user):
     request = context['request']
     host = get_original_host(request.get_host())
     return conf.REDIRECT_URL_FORMAT.format(host=host, user_id=user.pk)
+
+
+@register.filter()
+def has_permission_to_be(user, desired_user):
+    return conf.PERMISSION_CHECK(user, desired_user)
