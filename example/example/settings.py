@@ -25,9 +25,9 @@ SECRET_KEY = 'yw3iypngd#!7qy27z!)$5sfdg$+%k10y(x6ecj!q&7b+%be)x!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.host-user-override.dev']
+ALLOWED_HOSTS = ['.host-user-override.localhost']
 
-SESSION_COOKIE_DOMAIN = '.host-user-override.dev'
+SESSION_COOKIE_DOMAIN = '.host-user-override.localhost'
 
 
 # Application definition
@@ -134,3 +134,5 @@ HOSTUSEROVERRIDE_HOST_SUB_REGEXP = r'u\d+\.'
 HOSTUSEROVERRIDE_REDIRECT_URL_FORMAT = 'http://u{user_id}.{host}/'
 
 HOSTUSEROVERRIDE_PERMANENT_REDIRECT = False
+
+HOSTUSEROVERRIDE_PERMISSION_CHECK = lambda u1, u2: u2.username.startswith('t')

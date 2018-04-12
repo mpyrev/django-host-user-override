@@ -44,16 +44,17 @@ class HostUserOverrideMiddleware(object):
         host = request.META.get('HTTP_HOST', '')
         user_id = self.get_user_id(host)
 
-        if request.user.is_superuser:
-            if user_id is not None and user_id != request.user.pk:
-                User = get_user_model()
-                try:
-                    user = User.objects.exclude(is_superuser=True).get(pk=user_id)
-                except User.DoesNotExist:
-                    raise PermissionDenied
-                else:
-                    overridden = True
-                request.user = user
+        user = request.user
+        User = get_user_model()
+        if user_id is not None and user_id != request.user.pk:
+            try:
+                user = User.objects.exclude(is_superuser=True).get(pk=user_id)
+            except User.DoesNotExist:
+                raise PermissionDenied
+
+        if conf.PERMISSION_CHECK(request.user, user):
+            request.user = user
+            overridden = True
         else:
             # Redirect non-superusers to original domain
             # Probably should be 302 redirect, but we need permanent for SEO

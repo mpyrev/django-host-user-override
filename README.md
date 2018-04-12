@@ -6,7 +6,8 @@ request as if you were logged in as user with ID 5. This allows you
 to be logged in as different users in different tabs
 **at the same time** without losing your primary authenticated user.
 
-Works only if you're logged in as superuser.
+Works only if you're logged in as superuser by default (can be
+changed in settings).
 
 Also gives you big red banner on top of every page if your user is
 overridden.
@@ -70,6 +71,10 @@ HOSTUSEROVERRIDE_REDIRECT_URL_FORMAT = 'http://u{user_id}.{host}/'
 
 HOSTUSEROVERRIDE_PERMANENT_REDIRECT = False
 ```
+
+7. Set ```HOSTUSEROVERRIDE_PERMISSION_CHECK``` to customize required
+permissions. Should be function that takes 2 positional arguments:
+current user and desired user.
 
 ## Usage
 
