@@ -52,7 +52,7 @@ class HostUserOverrideMiddleware(object):
             except User.DoesNotExist:
                 raise PermissionDenied
 
-        if conf.PERMISSION_CHECK(request.user, user):
+        if request.user != user and conf.PERMISSION_CHECK(request.user, user):
             request.user = user
             overridden = True
         else:
