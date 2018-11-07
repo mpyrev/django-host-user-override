@@ -24,3 +24,5 @@ REDIRECT_URL_FORMAT = get_setting('REDIRECT_URL_FORMAT', 'http://{user_id}.user.
 PERMANENT_REDIRECT = get_setting('HOST_SUB_REGEXP', False)
 
 PERMISSION_CHECK = get_setting('PERMISSION_CHECK', permission_check)
+
+FORCE_ACTIVE = get_setting('FORCE_ACTIVE', False)

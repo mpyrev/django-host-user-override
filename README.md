@@ -76,6 +76,8 @@ HOSTUSEROVERRIDE_PERMANENT_REDIRECT = False
 permissions. Should be function that takes 2 positional arguments:
 current user and desired user.
 
+8. Set ```HOSTUSEROVERRIDE_FORCE_ACTIVE``` to force overriden user to be active even when he is actually disabled.
+
 ## Usage
 
 Open any non-superuser in Django Admin and press 'Login as multiuser' button.

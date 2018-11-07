@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-15 14:59+0300\n"
+"POT-Creation-Date: 2018-11-07 17:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,12 +20,16 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: templates/host_user_override/banner.html:11
+#: host_user_override/templates/host_user_override/banner.html:11
 #, python-format
 msgid "You're logged in as %(user)s."
 msgstr "Вы вошли как %(user)s."
 
-#: templates/host_user_override/banner.html:14
+#: host_user_override/templates/host_user_override/banner.html:13
+msgid "Disabled user was explicitly enabled."
+msgstr "Деактивированный пользователь был явно активирован."
+
+#: host_user_override/templates/host_user_override/banner.html:17
 #, python-format
 msgid ""
 "Get back to admin as <a href=\"//%(original_host)s%(admin_index)s\">"
@@ -34,6 +38,6 @@ msgstr ""
 "Вернуться в админку как <a href=\"//%(original_host)s%(admin_index)s\">"
 "%(original)s</a>."
 
-#: templates/host_user_override/change_form.html:7
+#: host_user_override/templates/host_user_override/change_form.html:7
 msgid "Login as multiuser"
 msgstr "Зайти как мультипользователь"

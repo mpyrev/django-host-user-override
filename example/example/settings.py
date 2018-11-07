@@ -136,3 +136,11 @@ HOSTUSEROVERRIDE_REDIRECT_URL_FORMAT = 'http://u{user_id}.{host}/'
 HOSTUSEROVERRIDE_PERMANENT_REDIRECT = False
 
 HOSTUSEROVERRIDE_PERMISSION_CHECK = lambda u1, u2: u2.username.startswith('t')
+
+HOSTUSEROVERRIDE_FORCE_ACTIVE = False
+
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

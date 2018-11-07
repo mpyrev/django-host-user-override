@@ -9,6 +9,9 @@
         <div class="content">
             {% block banner_content %}
                 {% blocktrans %}You're logged in as {{ user }}.{% endblocktrans %}
+                {% if activated %}
+                    {% blocktrans %}Disabled user was explicitly enabled.{% endblocktrans %}
+                {% endif %}
                 {% get_original_host as original_host %}
                 {% url 'admin:index' as admin_index %}
                 {% blocktrans %}Get back to admin as <a href="//{{ original_host }}{{ admin_index }}">{{ original }}</a>.{% endblocktrans %}

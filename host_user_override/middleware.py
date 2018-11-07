@@ -39,6 +39,7 @@ class HostUserOverrideMiddleware(object):
 
     def __call__(self, request):
         overridden = False
+        activated = False
         original_user = request.user
 
         host = request.META.get('HTTP_HOST', '')
@@ -54,13 +55,17 @@ class HostUserOverrideMiddleware(object):
 
         if request.user != user and conf.PERMISSION_CHECK(request.user, user):
             request.user = user
+            # Force active state if setting is set
+            if conf.FORCE_ACTIVE and not request.user.is_active:
+                request.user.is_active = True
+                activated = True
             overridden = True
         else:
             # Redirect non-superusers to original domain
             # Probably should be 302 redirect, but we need permanent for SEO
             if user_id is not None:
                 original_host = get_original_host(host)
-                return REDIRECT_RESPONSE_CLASS(u'{scheme}://{host}{path}'.format(
+                return REDIRECT_RESPONSE_CLASS('{scheme}://{host}{path}'.format(
                     scheme=request.scheme, host=original_host, path=request.path
                 ))
 
@@ -84,6 +89,7 @@ class HostUserOverrideMiddleware(object):
                 bits[1] = render_to_string('host_user_override/banner.html', request=request, context={
                     'user': user,
                     'original': original_user,
+                    'activated': activated,
                 }) + bits[1]
                 response.content = insert_after.join(bits)
                 if response.get('Content-Length', None):

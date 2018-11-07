@@ -4,5 +4,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>{{ request.user.pk }}:{{ request.user }}</body>
+<body>
+{{ request.user }} <br>
+ID: {{ request.user.pk }} <br>
+is_active: {{ request.user.is_active }}
+</body>
 </html>

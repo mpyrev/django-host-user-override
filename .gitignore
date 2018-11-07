@@ -6,3 +6,4 @@ dist/
 build/
 *.egg-info/
 README.rst
+local_settings.py
