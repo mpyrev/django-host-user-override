@@ -20,28 +20,6 @@ if conf.PERMANENT_REDIRECT:
     REDIRECT_RESPONSE_CLASS = HttpResponsePermanentRedirect
 
 
-User = get_user_model()
-
-
-class UserProxy(User):
-    class Meta:
-        proxy = True
-
-    @classmethod
-    def hijack_user(cls, user):
-        obj = cls()
-        obj.__dict__ = dict(user.__dict__)
-        obj.is_active = True
-        obj.__user = user
-        return obj
-
-    def save(self, **kwargs):
-        old_val = self.is_active
-        self.is_active = self.__user.is_active
-        super(UserProxy, self).save(**kwargs)
-        self.is_active = old_val
-
-
 class HostUserOverrideMiddleware(object):
     """
     Overrides current user if host is like <id>.user.<host> and AuthenticationMiddleware
@@ -68,6 +46,7 @@ class HostUserOverrideMiddleware(object):
         user_id = self.get_user_id(host)
 
         user = request.user
+        User = get_user_model()
         if user_id is not None and user_id != request.user.pk:
             try:
                 user = User.objects.exclude(is_superuser=True).get(pk=user_id)
@@ -78,6 +57,24 @@ class HostUserOverrideMiddleware(object):
             request.user = user
             # Force active state if setting is set
             if conf.FORCE_ACTIVE and not request.user.is_active:
+                class UserProxy(User):
+                    class Meta:
+                        proxy = True
+
+                    @classmethod
+                    def hijack_user(cls, user):
+                        obj = cls()
+                        obj.__dict__ = dict(user.__dict__)
+                        obj.is_active = True
+                        obj.__user = user
+                        return obj
+
+                    def save(self, **kwargs):
+                        old_val = self.is_active
+                        self.is_active = self.__user.is_active
+                        super(UserProxy, self).save(**kwargs)
+                        self.is_active = old_val
+
                 request.user = UserProxy.hijack_user(request.user)
                 activated = True
             overridden = True
