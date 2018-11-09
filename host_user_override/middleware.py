@@ -2,6 +2,8 @@
 from __future__ import unicode_literals, absolute_import
 
 import re
+import types
+from functools import wraps
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
@@ -18,6 +20,20 @@ _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 REDIRECT_RESPONSE_CLASS = HttpResponseRedirect
 if conf.PERMANENT_REDIRECT:
     REDIRECT_RESPONSE_CLASS = HttpResponsePermanentRedirect
+
+
+def hijack_user(user):
+    old_is_active = user.is_active
+    old_save = user.save
+    user.is_active = True
+
+    @wraps(old_save)
+    def save(self, **kwargs):
+        self.is_active = old_is_active
+        old_save(**kwargs)
+        self.is_active = True
+
+    user.save = types.MethodType(save, user)
 
 
 class HostUserOverrideMiddleware(object):
@@ -57,25 +73,7 @@ class HostUserOverrideMiddleware(object):
             request.user = user
             # Force active state if setting is set
             if conf.FORCE_ACTIVE and not request.user.is_active:
-                class UserProxy(User):
-                    class Meta:
-                        proxy = True
-
-                    @classmethod
-                    def hijack_user(cls, user):
-                        obj = cls()
-                        obj.__dict__ = dict(user.__dict__)
-                        obj.is_active = True
-                        obj.__user = user
-                        return obj
-
-                    def save(self, **kwargs):
-                        old_val = self.is_active
-                        self.is_active = self.__user.is_active
-                        super(UserProxy, self).save(**kwargs)
-                        self.is_active = old_val
-
-                request.user = UserProxy.hijack_user(request.user)
+                hijack_user(request.user)
                 activated = True
             overridden = True
         else:
