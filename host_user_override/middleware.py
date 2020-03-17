@@ -98,16 +98,15 @@ class HostUserOverrideMiddleware(object):
         if overridden:
             # Inject top banner
             content = force_text(response.content, encoding=response.charset)
-            insert_after = '<body>'
-            pattern = re.escape(insert_after)
-            bits = re.split(pattern, content, flags=re.IGNORECASE)
+            bits = re.split(r'(<body.*>)', content, flags=re.IGNORECASE)
             if len(bits) > 1:
-                bits[1] = render_to_string('host_user_override/banner.html', request=request, context={
+                banner_html = render_to_string('host_user_override/banner.html', request=request, context={
                     'user': user,
                     'original': original_user,
                     'activated': activated,
-                }) + bits[1]
-                response.content = insert_after.join(bits)
+                })
+                bits.insert(2, banner_html)
+                response.content = ''.join(bits)
                 if response.get('Content-Length', None):
                     response['Content-Length'] = len(response.content)
 

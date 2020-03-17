@@ -40,4 +40,4 @@ msgstr ""
 
 #: host_user_override/templates/host_user_override/change_form.html:7
 msgid "Login as multiuser"
-msgstr "Зайти как мультипользователь"
+msgstr "Войти как мультипользователь"
