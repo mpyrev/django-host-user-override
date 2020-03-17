@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 BASE_DIR = os.path.dirname(__file__)
 
-with open(os.path.join(BASE_DIR, 'README.rst')) as readme:
+with open(os.path.join(BASE_DIR, 'README.md')) as readme:
     README = readme.read()
 
 with open(os.path.join(BASE_DIR, 'requirements.txt')) as requirements:
@@ -21,6 +21,7 @@ setup(
     license='MIT License',
     description='Override current user based on subdomain',
     long_description=README,
+    long_description_content_type='text/markdown',
     author='Mikhail Pyrev',
     author_email='mikhail.pyrev@gmail.com',
     url='https://github.com/mpyrev/django-host-user-override',
