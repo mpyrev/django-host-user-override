@@ -70,6 +70,7 @@ class HostUserOverrideMiddleware(object):
                 raise PermissionDenied
 
         if request.user != user and conf.PERMISSION_CHECK(request.user, user):
+            request.original_user = original_user
             request.user = user
             # Force active state if setting is set
             if conf.FORCE_ACTIVE and not request.user.is_active:
